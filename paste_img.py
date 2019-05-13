@@ -1,7 +1,7 @@
 import sys, os
 import glob
 from PIL import Image
-
+import time
 
 def paste_image(input_path, col_num, row_num, out_path):
     listdir = os.listdir(input_path)
@@ -10,8 +10,8 @@ def paste_image(input_path, col_num, row_num, out_path):
         file_name = files.split('.')
         if file_name[-1] == 'jpg':
             img_files.append(files)
-
-    # print(img_files)
+    img_files.sort(key=os.path.getmtime)
+    #print(img_files)
 
     img_size_w = []
     img_size_h = []
@@ -30,6 +30,7 @@ def paste_image(input_path, col_num, row_num, out_path):
 
     result = Image.new("RGB", (int(result_w), int(result_h)))
     img_idx = 0
+    #print(img_files)
     for iters in range(int(col_num)):
         for i in range(int(row_num)):
             piece = Image.open(os.path.join(input_path, img_files[img_idx]))
