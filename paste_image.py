@@ -131,7 +131,7 @@ def get_distance_between(edge1, edge2):
     for index in range(length):
         distance += math.sqrt( (float(edge1[index][0]) - float(edge2[length-index-1][0])) ** 2 +
                                (float(edge1[index][1]) - float(edge2[length-index-1][1])) ** 2 +
-                               (float(edge1[index][2]) - float(edge2[length-index-1][2])) ** 2 )
+                               (float(edge1[index][2]) - float(edge2[length-index-1][2])) ** 2)
     distance = int(distance)
     return round(distance, 2)
 
@@ -154,7 +154,7 @@ def combine(col, row, pieces, out_path):
         else:
             final_piece = np.vstack((final_piece, long_pieces[j]))
 
-    cv2.imwrite(os.path.join(out_path, 'final.jpg'), cv2.cvtColor(final_piece, cv2.COLOR_RGB2BGR))
+    cv2.imwrite(os.path.join(out_path, 'final.jpg'), cv2.cvtColor(np.float32(final_piece), cv2.COLOR_RGB2BGR))
 
 
 if __name__ == '__main__':
