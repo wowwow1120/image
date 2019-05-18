@@ -14,21 +14,23 @@ def paste_img(input_path):
             img_list.append(i)
     print(img_list)
 
+    edges_dict = {}
     pieces_dict = {}
     for img in img_list:
         open_img = pilimg.open(os.path.join(input_path, img))
         img_w, img_h = open_img.size
         img_array = np.array(open_img)
+        pieces_dict[img.split('.')[0]] = img_array
         edge1 = img_array[0, :]
         edge2 = img_array[:, int(img_w - 1)]
         edge3 = img_array[int(img_h - 1), :]
         edge4 = img_array[:, 0]
         edges = [edge1, edge2, edge3[::-1], edge4[::-1]]
-        pieces_dict[img.split('.')[0]] = edges
+        edges_dict[img.split('.')[0]] = edges
 
     cost_dict = {}
-    for key1, edges1 in pieces_dict.items():
-        for key2, edges2 in pieces_dict.items():
+    for key1, edges1 in edges_dict.items():
+        for key2, edges2 in edges_dict.items():
             if key1 == key2:
                 continue
             if key1 < key2:
@@ -108,7 +110,10 @@ def paste_img(input_path):
         else:
             continue
 
-    return pieces
+    pieces_in_order = []
+    for piece in pieces:
+        pieces_in_order.append(pieces_dict[piece])
+    return pieces_in_order
 
 
 def update_piece_edge_dict(piece_num, piece_edge, piece_num_edge):
@@ -154,7 +159,7 @@ def combine(col, row, pieces, out_path):
         else:
             final_piece = np.vstack((final_piece, long_pieces[j]))
 
-    cv2.imwrite(os.path.join(out_path, 'final.jpg'), cv2.cvtColor(np.float32(final_piece), cv2.COLOR_RGB2BGR))
+    cv2.imwrite(os.path.join(out_path, '/final.jpg'), cv2.cvtColor(final_piece, cv2.COLOR_RGB2BGR))
 
 
 if __name__ == '__main__':
