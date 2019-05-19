@@ -36,17 +36,21 @@ def paste_img(input_path):
             if key1 < key2:
                 name1 = key1
                 name2 = key2
+                tmp_edges1 = edges1
+                tmp_edges2 = edges2
             else:
                 name1 = key2
                 name2 = key1
+                tmp_edges1 = edges2
+                tmp_edges2 = edges1
 
-            for idx1 in range(0, len(edges1)):
-                for idx2 in range(0, len(edges2)):
+            for idx1 in range(0, len(tmp_edges1)):
+                for idx2 in range(0, len(tmp_edges2)):
                     cost_key = name1 + str(idx1) + name2 + str(idx2)
                     cost_key_2 = name1 + name2
                     if cost_key in cost_dict:
                         continue
-                    cost_dict[cost_key, cost_key_2] = get_distance_between(edges1[idx1], edges2[idx2])
+                    cost_dict[cost_key, cost_key_2] = get_distance_between(tmp_edges1[idx1], tmp_edges2[idx2])
 
     cost_dict_sort = sorted(cost_dict.items(), key=operator.itemgetter(1))
 
@@ -159,7 +163,7 @@ def combine(col, row, pieces, out_path):
         else:
             final_piece = np.vstack((final_piece, long_pieces[j]))
 
-    cv2.imwrite(os.path.join(out_path, '/final.jpg'), cv2.cvtColor(final_piece, cv2.COLOR_RGB2BGR))
+    cv2.imwrite(os.path.join(out_path, 'final.jpg'), cv2.cvtColor(final_piece, cv2.COLOR_RGB2BGR))
 
 
 if __name__ == '__main__':
