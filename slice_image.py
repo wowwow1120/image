@@ -6,22 +6,36 @@ from random import shuffle
 import numpy as np
 
 
-def flipping(img_name):
-    img = Image.open(img_name)
+def flipping(img):
+    # img = Image.open(img_name)
+    img = np.array(img)
     img_flip = np.flipud(img)
-    Image.fromarray(img_flip).save(img_name)
+    return Image.fromarray(img_flip)
 
 
-def mirroring(img_name):
-    img = Image.open(img_name)
+def mirroring(img):
+    # img = Image.open(img_name)
+    img = np.array(img)
     img_mir = np.fliplr(img)
-    Image.fromarray(img_mir).save(img_name)
+    return Image.fromarray(img_mir)
 
 
-def rotate(img_name):
-    img = Image.open(img_name)
+def rotate(img):
+    # img = Image.open
+    img = np.array(img)
     img_rot = np.rot90(img)
-    Image.fromarray(img_rot).save(img_name)
+    return Image.fromarray(img_rot)
+
+
+def random_transform(img):
+    if bool(random.getrandbits(1)):
+        img = flipping(img)
+    if bool(random.getrandbits(1)):
+        img = mirroring(img)
+    if bool(random.getrandbits(1)):
+        img = rotate(img)
+    return img
+
 
 def image_crop(infilename, col_num, row_num, out_path):
     img = Image.open(infilename)
@@ -54,10 +68,11 @@ def image_crop(infilename, col_num, row_num, out_path):
             img_box = (h * grid_h, w * grid_w, (h + 1) * grid_h, (w + 1) * grid_w)
             print(h * grid_h, w * grid_w, (h + 1) * grid_h, (w + 1) * grid_w)
             crop_img = img.crop(img_box)
+            transformed_img = random_transform(crop_img)
             fname = '0' + str(img_num[i]) if img_num[i] / 10 < 1 else str(img_num[i])
             full_name = fname + '.jpg'
             savename = os.path.join(out_path, full_name)
-            crop_img.save(savename)
+            transformed_img.save(savename)
             print('save file ' + savename + '....')
             i += 1
 
